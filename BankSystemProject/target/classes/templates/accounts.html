@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Accounts - Dast1nn Bank</title>
+		<style>
+			/* Reset and base styles */
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+				'Helvetica Neue', Arial, sans-serif;
+				background-color: rgb(249, 250, 251);
+				color: rgb(17, 24, 39);
+				line-height: 1.5;
+			}
+
+			/* Layout */
+			.layout {
+				display: flex;
+				min-height: 100vh;
+			}
+
+			/* Sidebar */
+			.sidebar {
+				width: 256px;
+				background-color: white;
+				box-shadow: 4px 0 6px -1px rgba(0, 0, 0, 0.1);
+				padding: 1.5rem;
+				position: fixed;
+				height: 100vh;
+			}
+
+			.logo {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.5rem;
+			}
+
+			.logo-icon {
+				color: rgb(37, 99, 235);
+			}
+
+			.logo span {
+				font-size: 1.25rem;
+				font-weight: 700;
+			}
+
+			.nav-menu {
+				margin-top: 2rem;
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+			}
+
+			.nav-item {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				padding: 0.75rem;
+				color: rgb(75, 85, 99);
+				text-decoration: none;
+				border-radius: 0.5rem;
+				transition: all 0.2s;
+			}
+
+			.nav-item:hover {
+				background-color: rgb(243, 244, 246);
+			}
+
+			.nav-item.active {
+				background-color: rgb(239, 246, 255);
+				color: rgb(37, 99, 235);
+			}
+
+			/* Main Content */
+			.main-content {
+				flex: 1;
+				margin-left: 256px;
+				padding: 2rem;
+			}
+
+			/* Header */
+			.header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 2rem;
+			}
+
+			.header h1 {
+				font-size: 1.5rem;
+				font-weight: 700;
+				color: rgb(17, 24, 39);
+			}
+
+			.user-actions {
+				display: flex;
+				gap: 1rem;
+			}
+
+			.icon-button {
+				padding: 0.5rem;
+				border: none;
+				background: none;
+				border-radius: 9999px;
+				color: rgb(75, 85, 99);
+				cursor: pointer;
+				transition: background-color 0.2s;
+			}
+
+			.icon-button:hover {
+				background-color: rgb(243, 244, 246);
+			}
+
+			/* Account List */
+			.account-list {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+				margin-bottom: 2rem;
+			}
+
+			.account-item {
+				background-color: white;
+				border-radius: 0.75rem;
+				padding: 1.5rem;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+			}
+
+			.account-details {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+			}
+
+			.account-icon {
+				padding: 0.75rem;
+				background-color: rgb(239, 246, 255);
+				border-radius: 0.5rem;
+				color: rgb(37, 99, 235);
+			}
+
+			.account-number {
+				color: rgb(107, 114, 128);
+				font-size: 0.875rem;
+			}
+
+			.account-type {
+				color: rgb(75, 85, 99);
+				font-size: 0.875rem;
+				margin-top: 0.25rem;
+			}
+
+			.account-balance {
+				text-align: right;
+				display: flex;
+				gap: 15px;
+			}
+
+			.balance-label {
+				color: rgb(107, 114, 128);
+				font-size: 0.875rem;
+			}
+			.confirmed {
+				color: rgb(227, 5, 5);
+				font-size: 15px;
+				font-weight: bold;
+			}
+			.btn-view {
+				text-align: center;
+			}
+
+			.balance-amount {
+				font-size: 1.25rem;
+				font-weight: 600;
+				color: rgb(17, 24, 39);
+				margin: 0.25rem 0;
+			}
+
+			.view-details-btn {
+				background-color: rgb(239, 246, 255);
+				color: rgb(37, 99, 235);
+				border: none;
+				padding: 0.5rem 1rem;
+				border-radius: 0.375rem;
+				font-size: 0.875rem;
+				cursor: pointer;
+				transition: background-color 0.2s;
+			}
+
+			.view-details-btn:hover {
+				background-color: rgb(219, 234, 254);
+			}
+
+			.delete-account-btn {
+				padding: 0.5rem;
+				border: none;
+				background: none;
+				color: rgb(156, 163, 175);
+				cursor: pointer;
+				border-radius: 0.375rem;
+				transition: all 0.2s;
+			}
+
+			.delete-account-btn:hover {
+				background-color: rgb(254, 226, 226);
+				color: rgb(239, 68, 68);
+			}
+
+			/* Account Actions */
+			.account-actions {
+				margin-top: 2rem;
+			}
+
+			.account-actions h2 {
+				font-size: 1.25rem;
+				font-weight: 600;
+				margin-bottom: 1rem;
+			}
+
+			.action-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+				gap: 1rem;
+			}
+
+			.action-card {
+				background-color: white;
+				border-radius: 0.75rem;
+				padding: 1.5rem;
+				border: none;
+				text-align: left;
+				cursor: pointer;
+				transition: all 0.2s;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+			}
+
+			.action-card:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+			}
+
+			.action-card svg {
+				color: rgb(37, 99, 235);
+				margin-bottom: 1rem;
+			}
+
+			.action-card h3 {
+				font-size: 1.125rem;
+				font-weight: 600;
+				margin-bottom: 0.5rem;
+			}
+
+			.action-card p {
+				color: rgb(107, 114, 128);
+				font-size: 0.875rem;
+			}
+
+			/* Responsive Design */
+			@media (max-width: 768px) {
+				.sidebar {
+					width: 64px;
+					padding: 1rem;
+				}
+
+				.logo span,
+				.nav-item span {
+					display: none;
+				}
+
+				.main-content {
+					margin-left: 64px;
+				}
+
+				.account-item {
+					flex-direction: column;
+					align-items: flex-start;
+					gap: 1rem;
+				}
+
+				.account-balance {
+					text-align: left;
+					width: 100%;
+				}
+
+				.delete-account-btn {
+					align-self: flex-end;
+				}
+
+				.action-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+			.modal {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, 0.5);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				visibility: hidden;
+				opacity: 0;
+				transition: opacity 0.3s ease, visibility 0.3s ease;
+			}
+
+			.modal.show {
+				visibility: visible;
+				opacity: 1;
+			}
+
+			.modal-content {
+				background: white;
+				padding: 20px;
+				border-radius: 10px;
+				width: 100%;
+				max-width: 400px;
+				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+			}
+
+			.modal h2 {
+				margin-bottom: 15px;
+				font-size: 20px;
+			}
+
+			.form-group {
+				margin-bottom: 10px;
+			}
+
+			.form-group label {
+				display: block;
+				font-size: 14px;
+				margin-bottom: 5px;
+			}
+
+			.form-group input {
+				width: 100%;
+				padding: 8px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+			}
+
+			.modal-buttons {
+				display: flex;
+				justify-content: flex-end;
+				gap: 10px;
+				margin-top: 15px;
+			}
+
+			.btn {
+				padding: 8px 12px;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+
+			.btn.cancel {
+				background: #ddd;
+			}
+
+			.btn.submit {
+				background: #007bff;
+				color: white;
+			}
+
+			.btn:hover {
+				opacity: 0.8;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layout">
+			<!-- Sidebar -->
+			<aside class="sidebar">
+				<div class="logo">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="32"
+						height="32"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="logo-icon"
+					>
+						<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
+						<path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
+						<path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"></path>
+						<path d="M10 2h4"></path>
+					</svg>
+					<span>Dast1nn Bank</span>
+				</div>
+
+				<nav class="nav-menu">
+					<a href="dashboard.html" class="nav-item">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+							<path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+						</svg>
+						<span>Dashboard</span>
+					</a>
+					<a href="accounts.html" class="nav-item active">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<rect width="20" height="14" x="2" y="5" rx="2"></rect>
+							<line x1="2" x2="22" y1="10" y2="10"></line>
+						</svg>
+						<span>Accounts</span>
+					</a>
+					<a href="transfers.html" class="nav-item">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="m17 2 4 4-4 4"></path>
+							<path d="M3 11v-1a4 4 0 0 1 4-4h14"></path>
+							<path d="m7 22-4-4 4-4"></path>
+							<path d="M21 13v1a4 4 0 0 1-4 4H3"></path>
+						</svg>
+						<span>Transfers</span>
+					</a>
+					<a href="history.html" class="nav-item">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M3 12h4l3 8 4-16 3 8h4"></path>
+						</svg>
+						<span>History</span>
+					</a>
+				</nav>
+			</aside>
+
+			<!-- Main Content -->
+			<main class="main-content">
+				<header class="header">
+					<h1>Accounts</h1>
+					<div class="user-actions">
+						<button class="icon-button">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="20"
+								height="20"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+								<circle cx="12" cy="7" r="4"></circle>
+							</svg>
+						</button>
+						<button type="button" class="icon-button" onclick="logout()">
+						<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="20"
+								height="20"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+								<polyline points="16 17 21 12 16 7"></polyline>
+								<line x1="21" y1="12" x2="9" y2="12"></line>
+							</svg>
+						</button>
+					</div>
+				</header>
+
+				<!-- Account List -->
+				<section class="account-list">
+					<div th:each="user : ${users}" class="account-item">
+						<div class="account-details">
+							<div class="account-icon">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+									 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="12" cy="12" r="10"></circle>
+									<line x1="12" y1="16" x2="12" y2="16"></line>
+								</svg>
+							</div>
+							<div>
+								<h3 th:text="${user.getUsername()}">User Name</h3>
+								<p class="account-number" th:text="${user.getRole().name()}">User Role</p>
+							</div>
+						</div>
+						<div class="account-balance">
+							<th:block th:if="${user.getRole().name() == 'NOT_CONFIRMED'}">
+								<button class="view-details-btn" th:data-username="${user.getUsername()}" onclick="confirmUser(this)">
+									Confirm
+								</button>
+							</th:block>
+							<th:block th:if="${user.getRole().name() == 'CONFIRMED'}">
+								<button class="view-details-btn">
+									Confirmed
+								</button>
+							</th:block>
+						</div>
+					</div>
+				</section>
+
+				<script>
+					function confirmUser(button) {
+						const username = button.getAttribute("data-username");
+
+						fetch("/confirm-user", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json"
+							},
+							body: JSON.stringify({ username: username })
+						})
+								.then(response => {
+									if (response.ok) {
+										button.textContent = "Confirmed";
+										button.disabled = true;
+									} else {
+										alert("Error confirming user.");
+									}
+								})
+								.catch(error => console.error("Error:", error));
+					}
+				</script>
+
+
+
+				<!-- Account Actions -->
+				<section class="account-actions">
+					<h2>Quick Actions</h2>
+					<div class="action-grid">
+						<button class="action-card" onclick="showModal()">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<line x1="12" y1="5" x2="12" y2="19"></line>
+								<line x1="5" y1="12" x2="19" y2="12"></line>
+							</svg>
+							<h3>Add New Account</h3>
+							<p>Open a new checking or savings account</p>
+						</button>
+					</div>
+				</section>
+			</main>
+		</div>
+		<div id="modal" class="modal">
+			<div class="modal-content">
+				<h2>Create New User</h2>
+				<form id="userForm" method="post">
+					<div class="form-group">
+						<label for="username">Username</label>
+						<input
+							type="text"
+							id="username"
+							name="username"
+							required
+							placeholder="bank_user01"
+						/>
+					</div>
+
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input
+							type="password"
+							id="password"
+							name="password"
+							required
+							placeholder="••••••••"
+						/>
+					</div>
+
+					<div class="modal-buttons">
+						<button type="button" class="btn cancel" onclick="hideModal()">
+							Cancel
+						</button>
+						<button type="submit" class="btn submit">Create User</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<script>
+			function showModal() {
+				document.getElementById('modal').classList.add('show')
+			}
+
+			function hideModal() {
+				document.getElementById('modal').classList.remove('show')
+			}
+
+			async function logout() {
+				try {
+					const response = await fetch('/logout', { method: 'POST' });
+					if (response.ok) {
+						window.location.href = '/login'; // Redirect after logout
+					} else {
+						alert('Logout failed!');
+					}
+				} catch (error) {
+					console.error('Error:', error);
+				}
+			}
+
+			document.getElementById('userForm').addEventListener('submit', async function (event) {
+				event.preventDefault(); // Prevent default form submission
+
+				// Get form data
+				const formData = new URLSearchParams();
+				formData.append('username', document.getElementById('username').value);
+				formData.append('password', document.getElementById('password').value);
+
+				try {
+					const response = await fetch('/create-user', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded',
+						},
+						body: formData,
+					});
+
+					if (!response.ok) {
+						throw new Error('Failed to create user');
+					}
+
+					alert('User created successfully!');
+					hideModal(); // Hide modal after submission
+					location.reload(); // Reload the page
+				} catch (error) {
+					console.error('Error:', error);
+					alert('Error creating user');
+				}
+			});
+		</script>
+	</body>
+</html>

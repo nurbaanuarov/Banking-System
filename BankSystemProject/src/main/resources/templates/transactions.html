@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transaction History - Goldencat Bank</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .navbar-custom {
+            background-color: white;
+            border-bottom: 1px solid #e2e8f0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar-custom a {
+            color: #1e293b !important;
+        }
+
+        .navbar-custom .navbar-brand {
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin-top: 80px; /* Reduced margin for the table to be closer to the top */
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .table-custom {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; /* Ensures table is responsive */
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f1f5f9; /* Slightly lighter row color */
+        }
+
+        .table-striped td, .table-striped th {
+            color: #1e293b; /* Darker text color for visibility */
+            font-weight: bold; /* Bolder text for readability */
+            padding: 15px; /* Increase padding for better spacing */
+            border-bottom: 1px solid #3b82f6; /* Blue border for rows */
+        }
+
+        .table-striped th {
+            background-color: #eff6ff; /* Light blue background for headers */
+        }
+
+        .text-success {
+            color: #22c55e !important;
+        }
+
+        .text-danger {
+            color: #ef4444 !important;
+        }
+
+        .custom-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .custom-link:hover {
+            color: #bfdbfe;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <a class="navbar-brand" href="#">Das1nn Bank</a>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/transactions">Transactions</a></li>
+        <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h2 class="text-center">Transaction History</h2>
+    <div class="table-responsive table-custom">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="transaction, stat : ${transactions}">
+                <td th:text="${stat.index + 1}"></td>  <!-- Display sequential numbers -->
+                <td th:text="${transaction.type}"></td>
+                <td th:text="${transaction.amount}"
+                    th:classappend="${transaction.type.contains('Transfer In') || transaction.type == 'Deposit'} ? 'text-success' : 'text-danger'">
+                    <span th:text="${transaction.type.contains('Transfer In') || transaction.type == 'Deposit'} ? '+$' + transaction.amount : '-$' + transaction.amount"></span>
+                </td>
+                <td th:text="${transaction.timestamp.toLocalDate() + ' - ' + transaction.timestamp.toLocalTime()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="text-center"><a href="/dashboard" class="custom-link">Back to Dashboard</a></p>
+</div>
+
+</body>
+</html>
